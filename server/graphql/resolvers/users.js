@@ -23,9 +23,9 @@ module.exports = {
     async registerUserAddress(_, { address }) {
       // Validate address is base58
       const regEx = /^[1-9A-HJ-NP-Za-km-z]{44}$/;
-      if (!address.match(regEx)) {
-        throw new UserInputError("Invalid wallet address");
-      }
+      // if (!address.match(regEx)) {
+      //   throw new UserInputError("Invalid wallet address");
+      // }
 
       // Check if address already exists
       const user = await User.findOne({ address });

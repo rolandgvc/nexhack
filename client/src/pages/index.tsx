@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   VStack,
   Text,
+  Spacer,
 } from "@chakra-ui/react";
 
 import { queryClient } from "api";
@@ -64,23 +65,8 @@ const HomePage = ({ fetchedContests }) => (
             </Button>
           </VStack>
 
-          {/* Contests */}
-          {/* <VStack spacing={8} justify="center" align="center">
-            <SimpleGrid columns={3} spacing={10} pt={20}>
-              {fetchedContests.map((c) => (
-                <ContestCard
-                  key={c.id}
-                  title={c.title}
-                  body={c.body}
-                  header={c.header}
-                  slug={c.slug}
-                />
-              ))}
-            </SimpleGrid>
-            <Button size="lg" h="60px">
-              Join a contest
-            </Button>
-          </VStack> */}
+          {/* Make some space */}
+          <Box h="200px" />
 
           {/* Collections */}
           {/* <VStack justify="center" spacing={1}>
@@ -88,25 +74,6 @@ const HomePage = ({ fetchedContests }) => (
             <Text fontSize="lg">
               Stories and collections that inform, help and inspire. Explore our
               curations, handpicked for you.
-            </Text>
-            <SimpleGrid columns={3} spacing={10} pt={8}>
-              {fetchedContests.map((c) => (
-                <ContestCard
-                  key={c.id}
-                  title={c.title}
-                  body={c.body}
-                  header={c.header}
-                  slug={c.slug}
-                />
-              ))}
-            </SimpleGrid>
-          </VStack> */}
-
-          {/* Community */}
-          {/* <VStack justify="center" spacing={1}>
-            <Heading>Build your community</Heading>
-            <Text fontSize="lg">
-              Find and follow your favourite creators and hustles.
             </Text>
             <SimpleGrid columns={3} spacing={10} pt={8}>
               {fetchedContests.map((c) => (
