@@ -82,7 +82,7 @@ const NewSubmission = ({fetchedNFTs}) => {
 
   // Check wallet has ticket
   const [hasNFT, setHasNFT] = useState(false);
-  const connection = new Connection("https://ssc-dao.genesysgo.net");
+  const connection = new Connection("https://api.devnet.solana.com/");
   const pub = new PublicKey(publicKey);
   const metaplex = Metaplex.make(connection).use(
     walletAdapterIdentity({ publicKey: pub })
@@ -102,10 +102,8 @@ const NewSubmission = ({fetchedNFTs}) => {
       });
   }
 
-  
-
-  async function createNFTs(fetchedNFTs.) {
-    fetchedNFTs.map((element) => {
+  async function createNFTs(fetchedNFTs) {
+    fetchedNFTs.map(async (element) => {
       let creators : CreatorsConfig = [];
       
       for(var i = 0; i < element.addresses.length; i++)
@@ -128,9 +126,6 @@ const NewSubmission = ({fetchedNFTs}) => {
         creators: creators,
         symbol: "BA",
       }, {});
-
-      
-
     });
   }
 
