@@ -1,0 +1,14 @@
+query getContest($contestId: String!) {
+  getContest(contestId: $contestId) {
+    slug
+    title
+    body
+    prizes
+    participants
+    entries
+    header
+    isFeatured
+    # createdBy
+    createdAt
+  }
+}

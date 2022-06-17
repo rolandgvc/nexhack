@@ -1,0 +1,24 @@
+mutation updateUserProfile(
+  $address: String!
+  $avatar: String!
+  $username: String!
+  $name: String!
+  $bio: String!
+) {
+  updateUserProfile(
+    userProfileInput: {
+      address: $address
+      avatar: $avatar
+      username: $username
+      name: $name
+      bio: $bio
+    }
+  ) {
+    id
+    address
+    username
+    name
+    avatar
+    bio
+  }
+}

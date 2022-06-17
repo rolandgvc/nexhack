@@ -1,0 +1,21 @@
+{
+  "name": "nextbase-server",
+  "version": "0.1.0",
+  "private": true,
+  "author": "roland",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "lint:fix": "eslint --fix && yarn format"
+  },
+  "dependencies": {
+    "apollo-server": "^3.8.1",
+    "apollo-server-express": "^3.8.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.4",
+    "nodemon": "^2.0.16"
+  }
+}

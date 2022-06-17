@@ -1,0 +1,14 @@
+query getContests {
+  getContests {
+    title
+    body
+    prizes
+    participants
+    entries
+    header
+    slug
+    isFeatured
+    # createdBy
+    createdAt
+  }
+}

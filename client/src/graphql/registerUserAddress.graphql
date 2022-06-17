@@ -1,0 +1,7 @@
+mutation registerUserAddress($address: String!) {
+  registerUserAddress(address: $address) {
+    id
+    address
+    createdAt
+  }
+}
