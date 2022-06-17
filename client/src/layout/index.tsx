@@ -57,7 +57,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Box
         as="main"
         width="full"
-        maxWidth={1100}
+        // maxWidth={1100}
         margin="0 auto"
         pt={120}
         // background="gray.100"

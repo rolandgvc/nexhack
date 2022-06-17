@@ -56,7 +56,7 @@ const Header = () => {
       boxShadow="md"
       pos="fixed"
       width="full"
-      zIndex={2}
+      zIndex={10}
     >
       <Flex
         maxWidth="1100"
