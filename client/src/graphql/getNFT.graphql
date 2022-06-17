@@ -1,0 +1,11 @@
+query getNFT($nftId: String!) {
+  getNFT(nftId: $nftId) {
+    id
+    image
+    title
+    description
+    addresses
+    shares
+    timestamp
+  }
+}

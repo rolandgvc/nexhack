@@ -1,0 +1,11 @@
+query getNFTs {
+  getNFTs {
+    id
+    image
+    title
+    description
+    addresses
+    shares
+    timestamp
+  }
+}

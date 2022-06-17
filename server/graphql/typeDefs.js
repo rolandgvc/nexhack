@@ -1,47 +1,22 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  type Post {
+  type NFT {
     id: ID!
-    body: String!
-    createdAt: String!
-    username: String!
-    comments: [Comment]!
-    likes: [Like]!
-    likeCount: Int!
-    commentCount: Int!
-  }
-  type Comment {
-    id: ID!
-    createdAt: String!
-    username: String!
-    body: String!
-  }
-  type Like {
-    id: ID!
-    createdAt: String!
-    username: String!
-  }
-  type Contest {
-    id: ID!
-    slug: String!
+    image: String!
     title: String!
-    body: String!
-    prizes: [String]!
-    participants: [String]!
-    entries: [String]!
-    header: String!
-    isFeatured: Boolean!
-    createdBy: User!
-    createdAt: String!
+    description: String!
+    addresses: [String]!
+    shares: [String]!
+    timestamp: String!
   }
-  input ContestInput {
-    slug: String!
+  input NFTInput {
+    image: String!
     title: String!
-    body: String!
-    header: String!
-    prizes: [String]!
-    isFeatured: Boolean!
+    description: String!
+    addresses: [String]!
+    shares: [String]!
+    timestamp: String!
   }
   type User {
     id: ID!
@@ -63,20 +38,12 @@ module.exports = gql`
   type Query {
     getUserByAddress(address: String!): User
     getUserByUsername(username: String!): User
-    getContests: [Contest]
-    getContest(contestId: String!): Contest
-    getPosts: [Post]
-    getPost(postId: ID!): Post
+    getNFTs: [NFT]
+    getNFT(nftId: String!): NFT
   }
   type Mutation {
     registerUserAddress(address: String!): User!
     updateUserProfile(userProfileInput: UserProfileInput!): User!
-    createContest(contestInput: ContestInput!): Contest!
-    deleteContest(contestId: ID!): String!
-    createPost(body: String!): Post!
-    deletePost(postId: ID!): String!
-    createComment(postId: String!, body: String!): Post!
-    deleteComment(postId: ID!, commentId: ID!): Post!
-    likePost(postId: ID!): Post!
+    createNFT(nftInput: NFTInput!): NFT!
   }
 `;

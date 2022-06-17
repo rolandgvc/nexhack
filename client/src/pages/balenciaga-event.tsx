@@ -22,81 +22,13 @@ import { queryClient } from "api";
 import ContestCard from "components/contest/ContestCard";
 import ContestFeature from "components/contest/ContestFeature";
 
-import { GetContestsDocument } from "generated/graphql";
 import react, { ReactNode } from "react";
 import { BiWalletAlt } from "react-icons/bi";
 import { FaBookReader } from "react-icons/fa";
 
 import { FaCheckCircle } from 'react-icons/fa';
 
-
-export async function getServerSideProps(context) {
-  const { data } = await queryClient.query({
-    query: GetContestsDocument,
-  });
-
-  if (data.getContests) {
-    return {
-      props: {
-        fetchedContests: data.getContests,
-      },
-    };
-  }
-  return {
-    notFound: true,
-  };
-}
-
-const PriceWrapper = ({ children }: { children: ReactNode }) => (
-  <Box
-    mb={4}
-    shadow="base"
-    borderWidth="1px"
-    alignSelf={{ base: "center", lg: "flex-start" }}
-    borderColor={useColorModeValue('gray.200', 'gray.500')}
-    borderRadius={'xl'}>
-    {children}
-  </Box>
-);
-
-const ThreeTierPricing = () => {
-  return (
-    <Box py={0}>
-      <Stack
-        direction={{ base: 'column', md: 'row' }}
-        textAlign="center"
-        justify="center"
-        spacing={{ base: 4, lg: -2 }}
-        py={0}>
-
-        <PriceWrapper>
-          <Box position="relative" py={100} px={10} h="full">
-            <Image src="/BA_0.png" height="full" />
-          </Box>
-        </PriceWrapper>
-
-        <PriceWrapper>
-          <Box position="relative" z-index="10">
-            <Box py={120} px={8}>
-              <Image src="/BA_1.png" />
-            </Box>
-          </Box>
-        </PriceWrapper>
-
-        <PriceWrapper>
-          <Box position="relative">
-            <Box py={100} px={4}>
-              <Image src="/BA_2.png" />
-            </Box>
-          </Box>
-        </PriceWrapper>
-
-      </Stack>
-    </Box>
-  );
-};
-
-const BalenciagaEvent = ({ fetchedContests }) => {
+const BalenciagaEvent = () => {
   return (
     <>
       <Box

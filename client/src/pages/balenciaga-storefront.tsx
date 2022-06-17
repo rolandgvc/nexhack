@@ -23,7 +23,6 @@ import {
   import ContestCard from "components/contest/ContestCard";
   import ContestFeature from "components/contest/ContestFeature";
   
-  import { GetContestsDocument } from "generated/graphql";
   import react, { ReactNode } from "react";
   import { BiWalletAlt } from "react-icons/bi";
   import { FaBookReader } from "react-icons/fa";
