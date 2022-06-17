@@ -12,23 +12,18 @@ import {
   Text,
   useToast,
   Center,
-  SimpleGrid,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // import ChakraNextImage from "components/ChakraNextImage";
-import { GetUserByAddressDocument } from "generated/graphql";
-import FileUpload from "components/FileUpload";
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 
-import {
-  bundlrStorage,
-  Metaplex,
-  walletAdapterIdentity,
-} from "@metaplex-foundation/js";
+import FileUpload from "components/FileUpload";
+import { DeleteIcon } from "@chakra-ui/icons";
+
+import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+import { useRouter } from "next/router";
 
 const CreatorInput = ({ idx }) => {
   return (
@@ -72,7 +67,7 @@ const NewSubmission = () => {
     walletAdapterIdentity({ publicKey: pub })
   );
   const mintAddress = new PublicKey(
-    "6o3V9UoHArYfW4W7nxzdCyhYidUcFqEn5NoQywDkDyB"
+    "6o3V9UoHArYfW4W7nxzdCyhYidUcFqEn5NoQywDkDyBv"
   );
   async function fetchNFT() {
     const nfts = await metaplex
@@ -106,7 +101,11 @@ const NewSubmission = () => {
 
   /// HANDLERS ///
 
-  const onSubmitNFT = () => {};
+  const router = useRouter();
+
+  const onSubmitNFT = () => {
+    router.push("/submission-success");
+  };
 
   return (
     <Center display={{ sm: "flex", md: "flex" }}>
@@ -151,16 +150,33 @@ const NewSubmission = () => {
           <FormLabel htmlFor="creators">
             Who is your squad? What is the fractionalization of the NFT?
           </FormLabel>
+          {/* Address Inputs */}
           <VStack spacing={4} alignItems={"left"}>
-            <CreatorInput idx={"1"} />
+            <HStack key={1} spacing="24px">
+              <Text>Address {1}: </Text>
+              <Input
+                id="creator-address"
+                placeholder="2ovP...HGNk"
+                value={publicKey.toString()}
+                w="300px"
+              />
+              <Text>Share (%): </Text>
+              <Input
+                id="creator-share"
+                placeholder="25"
+                value={100}
+                w="100px"
+              />
+            </HStack>
+
             <CreatorInput idx={"2"} />
-            <CreatorInput idx={"3"} />
+            {/* <CreatorInput idx={"3"} /> */}
 
             {/* {creators.map((c) => (
               <creatorInput />
             ))} */}
           </VStack>
-          <Button onClick={onSubmitNFT} size="md" mt="24px" ml="36%" w="20%">
+          <Button onClick={() => {}} size="md" mt="24px" ml="36%" w="20%">
             Add Memeber
           </Button>
         </FormControl>
