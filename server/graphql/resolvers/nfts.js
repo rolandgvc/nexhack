@@ -28,11 +28,7 @@ module.exports = {
   Mutation: {
     async createNFT(
       _,
-      { NFTInput: { image,
-        title,
-        description,
-        addresses,
-        shares } },
+      { nftInput: { image, title, description, addresses, shares } },
       context
     ) {
       if (title.trim() === "") {
@@ -51,9 +47,9 @@ module.exports = {
         timestamp: new Date().toISOString(),
       });
 
-      const NFT = await newNFT.save();
+      const nft = await newNFT.save();
 
-      return NFT;
+      return nft;
     },
   },
 };

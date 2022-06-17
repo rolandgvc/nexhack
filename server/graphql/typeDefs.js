@@ -16,7 +16,6 @@ module.exports = gql`
     description: String!
     addresses: [String]!
     shares: [String]!
-    timestamp: String!
   }
   type User {
     id: ID!
@@ -38,8 +37,8 @@ module.exports = gql`
   type Query {
     getUserByAddress(address: String!): User
     getUserByUsername(username: String!): User
-    getNFTs: [NFT]
     getNFT(nftId: String!): NFT
+    getNFTs: [NFT]
   }
   type Mutation {
     registerUserAddress(address: String!): User!

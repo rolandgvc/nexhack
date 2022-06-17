@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 
-const contestSchema = new Schema({
+const nftSchema = new Schema({
   image: String,
   title: String,
   description: String,
@@ -9,4 +9,4 @@ const contestSchema = new Schema({
   timestamp: String,
 });
 
-module.exports = model("NFT", contestSchema);
+module.exports = model("NFT", nftSchema);
