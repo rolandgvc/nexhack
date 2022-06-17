@@ -24,6 +24,27 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 import { useRouter } from "next/router";
+import { config } from "styles/customTheme/config";
+
+import { queryClient } from "api";
+import { GetNfTsDocument } from "generated/graphql";
+
+
+import {CandyMachineConfigWithoutStorage, CreatorsConfig} from "@metaplex-foundation/js"
+
+const getServerSideProps = async () => {
+  const { data } = await queryClient.query({
+      query: GetNfTsDocument,
+   });
+
+  if (data.getNFTs) {
+    return { 
+      props: { fetchedNFTs: data.getNFTs },
+    };
+  } return {
+    notFound: true,
+  }
+};
 
 const CreatorInput = ({ idx }) => {
   return (
@@ -46,7 +67,7 @@ const CreatorInput = ({ idx }) => {
   );
 };
 
-const NewSubmission = () => {
+const NewSubmission = ({fetchedNFTs}) => {
   // connect wallet
   const { publicKey } = useWallet();
 
@@ -79,6 +100,38 @@ const NewSubmission = () => {
       .catch(() => {
         setHasNFT(false);
       });
+  }
+
+  
+
+  async function createNFTs(fetchedNFTs.) {
+    fetchedNFTs.map((element) => {
+      let creators : CreatorsConfig = [];
+      
+      for(var i = 0; i < element.addresses.length; i++)
+      {
+        creators.push({
+          address: element.addresses[i],
+          verified: true,
+          share: element.shares[i],
+        });
+      }
+  
+      const cm = await metaplex.candyMachines().createFromConfig({
+        price: 0.00001,
+        number: 1,
+        sellerFeeBasisPoints: 500,
+        solTreasuryAccount: "617ppd9GrB892nmRLZx83Ska1JbQ9jFWzTpbSXS13hmf",
+        goLiveDate: "10 Jun 2022",
+        retainAuthority: true,
+        isMutable: false,
+        creators: creators,
+        symbol: "BA",
+      }, {});
+
+      
+
+    });
   }
 
   useEffect(() => {
