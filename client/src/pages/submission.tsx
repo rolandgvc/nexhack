@@ -43,44 +43,63 @@ const CreatorInput = ({ idx }) => {
   );
 };
 
+const AddressField = ({ id, address, share }) => {
+  return (
+    <HStack key={id} spacing="24px">
+      <Text>Address {id}: </Text>
+      <Input
+        id="creator-address"
+        placeholder="2ovP...HGNk"
+        value={address}
+        w="300px"
+      />
+      <Text>Share (%): </Text>
+      <Input id="creator-share" placeholder="25" value={share} w="100px" />
+    </HStack>
+  );
+};
+
 const NewSubmission = () => {
   // connect wallet
   const { publicKey } = useWallet();
-
-  // Check wallet is connected
-  if (!publicKey) {
-    return (
-      <Center>
-        <Text>Connect wallet to continue</Text>
-      </Center>
-    );
-  }
-
-  // Check wallet has ticket
   const [hasNFT, setHasNFT] = useState(false);
-  const connection = new Connection("https://api.devnet.solana.com/");
-  const pub = new PublicKey(publicKey);
-  const metaplex = Metaplex.make(connection).use(
-    walletAdapterIdentity({ publicKey: pub })
-  );
+  const [addresses, setAddresses] = useState([]);
+  const router = useRouter();
+
+  const connection = new Connection("https://ssc-dao.genesysgo.net");
+  // const connection = new Connection("https://api.devnet.solana.com/");
+
+  // Fetch contest ticket
   const mintAddress = new PublicKey(
     "6o3V9UoHArYfW4W7nxzdCyhYidUcFqEn5NoQywDkDyBv"
   );
   async function fetchNFT() {
-    const nfts = await metaplex
-      .nfts()
-      .findByMint(mintAddress)
-      .then(() => {
-        setHasNFT(true);
-      })
-      .catch(() => {
-        setHasNFT(false);
-      });
+    if (publicKey) {
+      const pub = new PublicKey(publicKey!);
+      const metaplex = Metaplex.make(connection).use(
+        walletAdapterIdentity({ publicKey: pub })
+      );
+      await metaplex
+        .nfts()
+        .findByMint(mintAddress)
+        .then(() => {
+          setHasNFT(true);
+        })
+        .catch(() => {
+          setHasNFT(false);
+        });
+    }
   }
 
   useEffect(() => {
+    setAddresses([
+      {
+        address: publicKey?.toString(),
+        share: "100",
+      },
+    ]);
     fetchNFT();
-  }, []);
+  }, [publicKey]);
 
   if (!hasNFT) {
     return (
@@ -90,11 +109,18 @@ const NewSubmission = () => {
     );
   }
 
-  const router = useRouter();
-
   const onSubmitNFT = () => {
     router.push("/submission-success");
   };
+
+  // Check wallet is connected
+  if (!publicKey) {
+    return (
+      <Center>
+        <Text>Connect wallet to continue</Text>
+      </Center>
+    );
+  }
 
   return (
     <Center display={{ sm: "flex", md: "flex" }}>
@@ -107,8 +133,8 @@ const NewSubmission = () => {
             Image, Video, Audio or 3D Model
           </FormLabel>
           <Text fontSize={14} pb={4}>
-            File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG,
-            GLB, GLTF. Max size: 100 MB
+            File types supported: JPG, PNG, GIF, SVG, MP4, MP3, WAV. Max size:
+            100 MB
           </Text>
           <FileUpload />
         </FormControl>
@@ -126,7 +152,7 @@ const NewSubmission = () => {
 
         {/* description */}
         <FormControl isRequired>
-          <FormLabel htmlFor="description">Lore</FormLabel>
+          <FormLabel htmlFor="description">Description</FormLabel>
           <Textarea
             id="description"
             placeholder="What is the story behind your NFT?"
@@ -136,38 +162,41 @@ const NewSubmission = () => {
 
         {/* creators */}
         <FormControl isRequired>
-          <FormLabel htmlFor="creators">
-            Who is your squad? What is the fractionalization of the NFT?
-          </FormLabel>
+          <FormLabel htmlFor="creators">Who is your squad?</FormLabel>
           {/* Address Inputs */}
           <VStack spacing={4} alignItems={"left"}>
-            <HStack key={1} spacing="24px">
-              <Text>Address {1}: </Text>
-              <Input
-                id="creator-address"
-                placeholder="2ovP...HGNk"
-                value={publicKey.toString()}
-                w="300px"
+            {addresses.map((address, idx) => (
+              <AddressField
+                key={idx}
+                id={idx}
+                address={address.address}
+                share={address.share}
               />
-              <Text>Share (%): </Text>
-              <Input
-                id="creator-share"
-                placeholder="25"
-                value={100}
-                w="100px"
-              />
-            </HStack>
-
-            <CreatorInput idx={"2"} />
-            {/* <CreatorInput idx={"3"} /> */}
-
-            {/* {creators.map((c) => (
-              <creatorInput />
-            ))} */}
+            ))}
           </VStack>
-          <Button onClick={() => {}} size="md" mt="24px" ml="36%" w="20%">
-            Add Memeber
-          </Button>
+
+          <HStack pt={4}>
+            <Button
+              onClick={() => {
+                setAddresses((prev) => [...prev, { address: "", share: "" }]);
+              }}
+              size="md"
+            >
+              Add
+            </Button>
+            <Button
+              bg={"red.100"}
+              onClick={() => {
+                let filter = addresses.filter(
+                  (item) => item !== addresses[addresses.length - 1]
+                );
+                setAddresses(filter);
+              }}
+              size="md"
+            >
+              Remove
+            </Button>
+          </HStack>
         </FormControl>
 
         <Box p="30px 0 100px 0">
