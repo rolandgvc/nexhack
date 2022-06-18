@@ -3,11 +3,11 @@
     "symbol": "BA",
     "description": "Balenciaga Lore Description.",
     "seller_fee_basis_points": 500,
-    "image": "3.png",
+    "image": "3.jpg",
     "attributes": [],
     "properties": {
         "creators": [{"address": "617ppd9GrB892nmRLZx83Ska1JbQ9jFWzTpbSXS13hmf", "share": 100}],
-        "files": [{"uri": "3.png", "type": "image/png"}]
+        "files": [{"uri": "3.jpg", "type": "image/png"}]
     },
     "collection": {"name": "balenciaga", "family": "balenciaga"}
 }

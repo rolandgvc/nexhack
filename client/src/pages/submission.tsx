@@ -16,7 +16,7 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 
-import {exec} from 'child_process'; 
+import * as shelljs from 'shelljs'
 
 // import ChakraNextImage from "components/ChakraNextImage";
 
@@ -106,56 +106,27 @@ const NewSubmission = ({fetchedNFTs}) => {
 
   async function createNFTs() {
     {
-
-      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts upload \
+      shelljs.exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts upload \
       -e devnet \
     -k ~/personal/devnet.json \
     -cp ~/personal/dev/config.json \
     -c balenciaga_c \
     ~/personal/dev/assets2');
-    
-    myShellScript.stdout.on('data', (data)=>{
-      console.log(data); 
-      // do whatever you want here with data
-    });
-    
-    myShellScript.stderr.on('data', (data)=>{
-        console.error(data);
-      });
     }
       
     {
-
-      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts verify_upload \
+      shelljs.exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts verify_upload \
       -e devnet \
       -k ~/personal/devnet.json \
       -c balenciaga_c');
-    
-    myShellScript.stdout.on('data', (data)=>{
-      console.log(data); 
-      // do whatever you want here with data
-    });
-    
-    myShellScript.stderr.on('data', (data)=>{
-        console.error(data);
-      });
     }
 
     for(var i = 0; i < 6; i++)
     {
-      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_token \
+      shelljs.exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_token \
       -e mainnet-beta \
       -k ~/personal/devnet.json \
       -c balenciaga_c');
-    
-    myShellScript.stdout.on('data', (data)=>{
-      console.log(data); 
-      // do whatever you want here with data
-    });
-    
-    myShellScript.stderr.on('data', (data)=>{
-        console.error(data);
-      });
     }
   }
 
