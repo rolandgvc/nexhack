@@ -16,14 +16,36 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 
-// import ChakraNextImage from "components/ChakraNextImage";
-
 import FileUpload from "components/FileUpload";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 import { useRouter } from "next/router";
+import { config } from "styles/customTheme/config";
+
+import { queryClient } from "api";
+import { GetNfTsDocument } from "generated/graphql";
+
+import {
+  CandyMachineConfigWithoutStorage,
+  CreatorsConfig,
+} from "@metaplex-foundation/js";
+
+export const getServerSideProps = async () => {
+  const { data } = await queryClient.query({
+    query: GetNfTsDocument,
+  });
+
+  if (data.getNFTs) {
+    return {
+      props: { fetchedNFTs: data.getNFTs },
+    };
+  }
+  return {
+    notFound: true,
+  };
+};
 
 const CreatorInput = ({ idx }) => {
   return (
@@ -46,7 +68,7 @@ const CreatorInput = ({ idx }) => {
   );
 };
 
-const NewSubmission = () => {
+const NewSubmission = ({ fetchedNFTs }) => {
   // connect wallet
   const { publicKey } = useWallet();
 
@@ -61,7 +83,7 @@ const NewSubmission = () => {
 
   // Check wallet has ticket
   const [hasNFT, setHasNFT] = useState(false);
-  const connection = new Connection("https://ssc-dao.genesysgo.net");
+  const connection = new Connection("https://api.devnet.solana.com/");
   const pub = new PublicKey(publicKey);
   const metaplex = Metaplex.make(connection).use(
     walletAdapterIdentity({ publicKey: pub })
@@ -81,19 +103,15 @@ const NewSubmission = () => {
       });
   }
 
-  async function createNFTs() {
-    const nfts = await metaplex.candyMachines();
-  }
-
   useEffect(() => {
     fetchNFT();
   }, []);
 
-  if (!hasNFT) {
-    return (
-      <Center>Sorry, we couldn't find the NFT ticket in your wallet :(</Center>
-    );
-  }
+  // if (!hasNFT) {
+  //   return (
+  //     <Center>Sorry, we couldn't find the NFT ticket in your wallet :(</Center>
+  //   );
+  // }
 
   /// HOOKS ///
 
@@ -187,7 +205,7 @@ const NewSubmission = () => {
 
         <Box p="30px 0 100px 0">
           <Button
-            onClick={onSubmitNFT}
+            onClick={() => {}}
             // disabled={userData.address}
             size="lg"
           >
