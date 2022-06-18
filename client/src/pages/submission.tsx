@@ -81,6 +81,10 @@ const NewSubmission = () => {
       });
   }
 
+  async function createNFTs() {
+    const nfts = await metaplex.candyMachines();
+  }
+
   useEffect(() => {
     fetchNFT();
   }, []);
