@@ -65,7 +65,13 @@ const Header = () => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <NextLink href="/">nexbase</NextLink>
+        <HStack spacing={8}>
+          <NextLink href="/">nexbase</NextLink>
+          <NextLink href="/contest">contest</NextLink>
+          <NextLink href="/submission">submission</NextLink>
+          <NextLink href="/curation">curation</NextLink>
+          <NextLink href="/storefront">storefront</NextLink>
+        </HStack>
 
         <HStack spacing={8} alignItems="center" marginLeft="auto">
           <IconButton

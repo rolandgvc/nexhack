@@ -1,0 +1,7 @@
+mutation createNFT($nftInput: NFTInput!) {
+  createNFT(nftInput: $nftInput) {
+    id
+    title
+    description
+  }
+}

@@ -7,7 +7,7 @@ import {
   SimpleGrid,
   VStack,
   Text,
-  Spacer,
+  Image,
 } from "@chakra-ui/react";
 
 import { queryClient } from "api";
@@ -39,67 +39,87 @@ const HomePage = () => (
   <>
     <Box
       w="full"
-      h="700px"
-      bgGradient="linear(to-r, #19012f, #39006f)"
+      h="1000px"
+      backgroundImage="/b-blur.png"
+      backgroundPosition="center"
+      backgroundRepeat="no-repeat"
+      backgroundSize="cover"
       opacity={1}
       position="absolute"
       top={0}
       left={0}
       zIndex={-1}
     />
-    <Box
-      display={{ md: "flex" }}
-      // alignItems="center"
-      minHeight="70vh"
-      // gap={8}
-      // mb={8}
-      w="full"
-    >
+    <Box display={{ md: "flex" }} minHeight="70vh" w="full">
       <Box w="full" pb={100}>
         <VStack pt={160} spacing={24} justify="center" align="center">
           {/* Header */}
-          <VStack spacing={8} justify="center" align="center">
-            <Heading fontSize="6xl" color="white">
-              Hustle. Create. Connect.
-            </Heading>
-            <Button size="lg" h="60px">
-              Discover your feed
-            </Button>
-          </VStack>
+          <HStack spacing={8}>
+            <VStack spacing={24} justify="center" align="center" w="50%">
+              <Heading color="black" fontSize="4xl">
+                BALENCIAGA: CYBERNATION
+              </Heading>
+              <Heading color="black" textAlign={"center"} fontSize="2xl">
+                A new contest arrives from CYBER, a dystopian take on fashion
+                and day-to-day life.
+              </Heading>
+              <Heading color="black" size="lg">
+                LEARN MORE
+              </Heading>
+            </VStack>
+            <Image
+              src={"b-home.jpg"}
+              // width={"50%"}
+              height={400}
+              rounded="40"
+              fit="cover"
+              align="center"
+              boxShadow="2xl"
+            />
+          </HStack>
 
           {/* Make some space */}
-          <Box h="200px" />
+          <Box h="50px" />
 
-          {/* Collections */}
-          {/* <VStack justify="center" spacing={1}>
-            <Heading>Explore collections</Heading>
-            <Text fontSize="lg">
-              Stories and collections that inform, help and inspire. Explore our
-              curations, handpicked for you.
-            </Text>
-            <SimpleGrid columns={3} spacing={10} pt={8}>
-              {fetchedContests.map((c) => (
-                <ContestCard
-                  key={c.id}
-                  title={c.title}
-                  body={c.body}
-                  header={c.header}
-                  slug={c.slug}
-                />
-              ))}
-            </SimpleGrid>
-          </VStack> */}
+          {/* How it works */}
+          <VStack justify="center" spacing={16} w="80%" pt={300}>
+            <Heading>HOW IT WORKS</Heading>
+            <HStack spacing={24}>
+              <VStack spacing={8} w={300} align="center" justify={"center"}>
+                <Image src={"team.svg"} height={250} />
+                <Text fontSize={"xl"} textAlign="center">
+                  Nexbase Contests provide a framework for brands and creators
+                  to collaborate on utility-first NFT collections.
+                </Text>
+              </VStack>
+              <VStack spacing={8} w={300} align="center" justify={"center"}>
+                <Image src={"market.svg"} height={250} />
+                <Text fontSize={"xl"} textAlign="center">
+                  At the end of a contest, a new storefront is generated where
+                  the crowdsourced collection becomes available for minting.
+                </Text>
+              </VStack>
+              <VStack spacing={8} w={300} align="center" justify={"center"}>
+                <Image src={"winners.svg"} height={250} />
+                <Text fontSize={"xl"} textAlign="center">
+                  For the first time, brands and fans can be partners in the
+                  ownership of the content. When brands win, everyone wins.
+                </Text>
+              </VStack>
+            </HStack>
+          </VStack>
 
           {/* Wallet */}
-          <VStack justify="center" spacing={8} w="80%">
-            <Heading>Your wallet. Your identity.</Heading>
-            <Text fontSize="lg">
-              We're building a social platform and marketplace powered by web3.
-              You won't need a username and password. Instead, you'll use a
-              self-custody crypto wallet as your digital passport to compete in
-              contests, earn reputation transact and store NFTs.
+          <VStack justify="center" spacing={16} w="80%" pt={250}>
+            <Heading>YOUR WALLET. YOUR IDENTITY</Heading>
+            <Text fontSize="xl">
+              We're building a web3 social platform and marketplace for the next
+              generation of brands and creators. You won't need a username and
+              password. Instead, you'll use a self-custody crypto wallet as your
+              digital passport to join contests, earn reputation, transact and
+              store NFTs.
             </Text>
-            <HStack>
+            <HStack spacing={8}>
               <Button
                 size="lg"
                 h="60px"

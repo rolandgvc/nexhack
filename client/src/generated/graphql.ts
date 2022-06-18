@@ -52,7 +52,6 @@ export type NftInput = {
   description: Scalars['String'];
   image: Scalars['String'];
   shares: Array<InputMaybe<Scalars['String']>>;
-  timestamp: Scalars['String'];
   title: Scalars['String'];
 };
 
@@ -99,6 +98,13 @@ export type UserProfileInput = {
   username: Scalars['String'];
 };
 
+export type CreateNftMutationVariables = Exact<{
+  nftInput: NftInput;
+}>;
+
+
+export type CreateNftMutation = { __typename?: 'Mutation', createNFT: { __typename?: 'NFT', id: string, title: string, description: string } };
+
 export type GetNftQueryVariables = Exact<{
   nftId: Scalars['String'];
 }>;
@@ -144,6 +150,15 @@ export type GetUserByUsernameQueryVariables = Exact<{
 export type GetUserByUsernameQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', address: string, avatar: string, username: string, name: string, bio: string } | null };
 
 
+export const CreateNftDocument = gql`
+    mutation createNFT($nftInput: NFTInput!) {
+  createNFT(nftInput: $nftInput) {
+    id
+    title
+    description
+  }
+}
+    `;
 export const GetNftDocument = gql`
     query getNFT($nftId: String!) {
   getNFT(nftId: $nftId) {
@@ -216,7 +231,10 @@ export const GetUserByUsernameDocument = gql`
 }
     `;
 export const getSdk = (client: ApolloClient<any>) => ({
-      getNftQuery(options: Partial<QueryOptions<GetNftQueryVariables, GetNftQuery>>) {
+      createNftMutation(options: Partial<MutationOptions<CreateNftMutation, CreateNftMutationVariables>>) {
+          return client.mutate<CreateNftMutation, CreateNftMutationVariables>({...options, mutation: CreateNftDocument})
+      },
+getNftQuery(options: Partial<QueryOptions<GetNftQueryVariables, GetNftQuery>>) {
           return client.query<GetNftQuery, GetNftQueryVariables>({...options, query: GetNftDocument})
       },
 getNfTsQuery(options: Partial<QueryOptions<GetNfTsQueryVariables, GetNfTsQuery>>) {

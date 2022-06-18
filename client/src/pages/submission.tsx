@@ -19,51 +19,23 @@ import FileUpload from "components/FileUpload";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
-import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import { useRouter } from "next/router";
-
-const CreatorInput = ({ idx }) => {
-  return (
-    <HStack key={idx} spacing="24px">
-      <Text>Address {idx}: </Text>
-      <Input id="creator-address" placeholder="2ovP...HGNk" w="300px" />
-      <Text>Share (%): </Text>
-      <Input id="creator-share" placeholder="25" w="100px" />
-      <DeleteIcon
-        color="red.500"
-        mr="2"
-        onClick={() => {
-          // setCreators(...creators, {
-          //   address: "xyz",
-          //   share: 25,
-          // });
-        }}
-      />
-    </HStack>
-  );
-};
-
-const AddressField = ({ id, address, share }) => {
-  return (
-    <HStack key={id} spacing="24px">
-      <Text>Address {id}: </Text>
-      <Input
-        id="creator-address"
-        placeholder="2ovP...HGNk"
-        value={address}
-        w="300px"
-      />
-      <Text>Share (%): </Text>
-      <Input id="creator-share" placeholder="25" value={share} w="100px" />
-    </HStack>
-  );
-};
+import { CreateNftDocument } from "../generated/graphql";
 
 const NewSubmission = () => {
   // connect wallet
   const { publicKey } = useWallet();
   const [hasNFT, setHasNFT] = useState(false);
-  const [addresses, setAddresses] = useState([]);
+  const [submission, setSubmission] = useState({
+    image: "cyber/5.jpg",
+    title: "",
+    description: "",
+    addresses: [],
+    shares: [],
+  });
+  const [createNFT] = useMutation(CreateNftDocument);
+
   const router = useRouter();
 
   const connection = new Connection("https://ssc-dao.genesysgo.net");
@@ -92,12 +64,11 @@ const NewSubmission = () => {
   }
 
   useEffect(() => {
-    setAddresses([
-      {
-        address: publicKey?.toString(),
-        share: "100",
-      },
-    ]);
+    setSubmission({
+      ...submission,
+      addresses: [publicKey?.toString()],
+      shares: ["100"],
+    });
     fetchNFT();
   }, [publicKey]);
 
@@ -110,6 +81,8 @@ const NewSubmission = () => {
   }
 
   const onSubmitNFT = () => {
+    // console.log(submission);
+    // createNFT({ variables: submission });
     router.push("/submission-success");
   };
 
@@ -122,6 +95,34 @@ const NewSubmission = () => {
     );
   }
 
+  // Hacky components
+  const AddressField = ({ id, address, share }) => {
+    return (
+      <HStack key={id} spacing="24px">
+        <Text>Address {id}: </Text>
+        <Input
+          id="creator-address"
+          placeholder="2ovP...HGNk"
+          onChange={(e) => {}}
+          value={address}
+          w="300px"
+        />
+        <Text>Share (%): </Text>
+        <Input
+          id="creator-share"
+          placeholder="25"
+          onChange={(e) => {
+            // const newShr = [...submission.shares[:-1], e.target.value];
+            // const newShr = [...submission.shares].splice(-1, 1, e.target.value);
+            // setSubmission({ ...submission, shares: newShr });
+          }}
+          value={share}
+          w="100px"
+        />
+      </HStack>
+    );
+  };
+
   return (
     <Center display={{ sm: "flex", md: "flex" }}>
       <VStack spacing={8} w="70%" align="stretch">
@@ -129,9 +130,7 @@ const NewSubmission = () => {
 
         {/* Image, Video, Audio or 3D Model */}
         <FormControl isRequired>
-          <FormLabel htmlFor="header">
-            Image, Video, Audio or 3D Model
-          </FormLabel>
+          <FormLabel htmlFor="image">Image, Video, Audio or 3D Model</FormLabel>
           <Text fontSize={14} pb={4}>
             File types supported: JPG, PNG, GIF, SVG, MP4, MP3, WAV. Max size:
             100 MB
@@ -144,7 +143,10 @@ const NewSubmission = () => {
           <FormLabel htmlFor="title">Title</FormLabel>
           <Input
             id="title"
-            // value={profileData.username}
+            value={submission.title}
+            onChange={(e) => {
+              setSubmission({ ...submission, title: e.target.value });
+            }}
             placeholder="NFT title"
             h="50px"
           />
@@ -155,6 +157,10 @@ const NewSubmission = () => {
           <FormLabel htmlFor="description">Description</FormLabel>
           <Textarea
             id="description"
+            value={submission.description}
+            onChange={(e) => {
+              setSubmission({ ...submission, description: e.target.value });
+            }}
             placeholder="What is the story behind your NFT?"
             h="100px"
           />
@@ -165,20 +171,21 @@ const NewSubmission = () => {
           <FormLabel htmlFor="creators">Who is your squad?</FormLabel>
           {/* Address Inputs */}
           <VStack spacing={4} alignItems={"left"}>
-            {addresses.map((address, idx) => (
-              <AddressField
-                key={idx}
-                id={idx}
-                address={address.address}
-                share={address.share}
-              />
+            {submission.addresses.map((address, idx) => (
+              <AddressField key={idx} id={idx} address={address} share={100} />
             ))}
           </VStack>
 
           <HStack pt={4}>
             <Button
               onClick={() => {
-                setAddresses((prev) => [...prev, { address: "", share: "" }]);
+                const newAddresses = [...submission.addresses, "0x"];
+                const newShares = [...submission.shares, "0"];
+                setSubmission({
+                  ...submission,
+                  addresses: newAddresses,
+                  shares: newShares,
+                });
               }}
               size="md"
             >
@@ -187,10 +194,18 @@ const NewSubmission = () => {
             <Button
               bg={"red.100"}
               onClick={() => {
-                let filter = addresses.filter(
-                  (item) => item !== addresses[addresses.length - 1]
+                let filterAddr = submission.addresses.filter(
+                  (item, idx) => idx !== submission.addresses.length - 1
                 );
-                setAddresses(filter);
+
+                let filterShr = submission.shares.filter(
+                  (item, idx) => idx !== submission.shares.length - 1
+                );
+                setSubmission({
+                  ...submission,
+                  addresses: filterAddr,
+                  shares: filterShr,
+                });
               }}
               size="md"
             >
