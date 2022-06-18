@@ -16,6 +16,8 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 
+import {exec} from 'child_process'; 
+
 // import ChakraNextImage from "components/ChakraNextImage";
 
 import FileUpload from "components/FileUpload";
@@ -32,7 +34,7 @@ import { GetNfTsDocument } from "generated/graphql";
 
 import {CandyMachineConfigWithoutStorage, CreatorsConfig} from "@metaplex-foundation/js"
 
-const getServerSideProps = async () => {
+export const getServerSideProps = async () => {
   const { data } = await queryClient.query({
       query: GetNfTsDocument,
    });
@@ -102,42 +104,71 @@ const NewSubmission = ({fetchedNFTs}) => {
       });
   }
 
-  async function createNFTs(fetchedNFTs) {
-    fetchedNFTs.map(async (element) => {
-      let creators : CreatorsConfig = [];
-      
-      for(var i = 0; i < element.addresses.length; i++)
-      {
-        creators.push({
-          address: element.addresses[i],
-          verified: true,
-          share: element.shares[i],
-        });
-      }
-  
-      const cm = await metaplex.candyMachines().createFromConfig({
-        price: 0.00001,
-        number: 1,
-        sellerFeeBasisPoints: 500,
-        solTreasuryAccount: "617ppd9GrB892nmRLZx83Ska1JbQ9jFWzTpbSXS13hmf",
-        goLiveDate: "10 Jun 2022",
-        retainAuthority: true,
-        isMutable: false,
-        creators: creators,
-        symbol: "BA",
-      }, {});
+  async function createNFTs() {
+    {
+
+      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts upload \
+      -e devnet \
+    -k ~/personal/devnet.json \
+    -cp ~/personal/dev/config.json \
+    -c balenciaga_c \
+    ~/personal/dev/assets2');
+    
+    myShellScript.stdout.on('data', (data)=>{
+      console.log(data); 
+      // do whatever you want here with data
     });
+    
+    myShellScript.stderr.on('data', (data)=>{
+        console.error(data);
+      });
+    }
+      
+    {
+
+      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts verify_upload \
+      -e devnet \
+      -k ~/personal/devnet.json \
+      -c balenciaga_c');
+    
+    myShellScript.stdout.on('data', (data)=>{
+      console.log(data); 
+      // do whatever you want here with data
+    });
+    
+    myShellScript.stderr.on('data', (data)=>{
+        console.error(data);
+      });
+    }
+
+    for(var i = 0; i < 6; i++)
+    {
+      const myShellScript = exec('npx ts-node ~/personal/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_token \
+      -e mainnet-beta \
+      -k ~/personal/devnet.json \
+      -c balenciaga_c');
+    
+    myShellScript.stdout.on('data', (data)=>{
+      console.log(data); 
+      // do whatever you want here with data
+    });
+    
+    myShellScript.stderr.on('data', (data)=>{
+        console.error(data);
+      });
+    }
   }
 
   useEffect(() => {
     fetchNFT();
   }, []);
 
-  if (!hasNFT) {
-    return (
-      <Center>Sorry, we couldn't find the NFT ticket in your wallet :(</Center>
-    );
-  }
+
+  // if (!hasNFT) {
+  //   return (
+  //     <Center>Sorry, we couldn't find the NFT ticket in your wallet :(</Center>
+  //   );
+  // }
 
   /// HOOKS ///
 
@@ -231,7 +262,7 @@ const NewSubmission = ({fetchedNFTs}) => {
 
         <Box p="30px 0 100px 0">
           <Button
-            onClick={onSubmitNFT}
+            onClick={createNFTs}
             // disabled={userData.address}
             size="lg"
           >

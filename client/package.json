@@ -39,6 +39,7 @@
     "@solana/web3.js": "^1.44.0",
     "@walletconnect/web3-provider": "^1.7.8",
     "@web3auth/web3auth": "^1.0.1",
+    "child_process": "^1.0.2",
     "focus-visible": "^5.2.0",
     "framer-motion": "^6.3.3",
     "graphql": "^16.5.0",
