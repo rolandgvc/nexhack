@@ -1,0 +1,13 @@
+{
+    "name": "Balenciaga #0001",
+    "symbol": "BA",
+    "description": "Balenciaga Lore Description.",
+    "seller_fee_basis_points": 500,
+    "image": "0.jpg",
+    "attributes": [],
+    "properties": {
+        "creators": [{"address": "617ppd9GrB892nmRLZx83Ska1JbQ9jFWzTpbSXS13hmf", "share": 100}],
+        "files": [{"uri": "0.jpg", "type": "image/png"}]
+    },
+    "collection": {"name": "balenciaga", "family": "balenciaga"}
+}

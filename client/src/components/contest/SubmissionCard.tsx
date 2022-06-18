@@ -8,22 +8,27 @@ import {
   Spacer,
   Image,
   VStack,
+  Flex,
+  CloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const SubmissionCard = ({
   title,
-  body,
-  header,
-  slug,
+  description,
+  image,
+  creators,
+  shares,
+  timestamp,
 }: {
   title?: string;
-  body?: string;
-  header?: string;
-  slug?: string;
+  description?: string;
+  image?: string;
+  creators?: [string];
+  shares?: [string];
+  timestamp?: string;
 }) => {
-  const router = useRouter();
-
   const PropertyCard = () => {
     return (
       <VStack
@@ -44,37 +49,53 @@ const SubmissionCard = ({
     );
   };
 
+  const [toggle, setToggle] = useState(true);
+  const toggleCard = () => {
+    setToggle(!toggle);
+  };
+
   return (
     <Box
       w="full"
-      bg={useColorModeValue("white", "gray.900")}
+      // bg={useColorModeValue("white", "gray.900")}
       boxShadow="lg"
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.800")}
       borderWidth="1px"
-      p={6}
+      p={8}
+      height={toggle ? "auto" : "100px"}
+      bgColor={toggle ? "auto" : "gray.500"}
       overflow="hidden"
     >
       <HStack spacing={4} align={"stretch"}>
-        <Image src={header} width={400} height={400} />
-        <VStack spacing={4} align="stretch">
-          {/* title */}
-          <Heading
-            color={useColorModeValue("gray.700", "white")}
-            fontSize="2xl"
-            fontFamily="body"
-          >
-            {title}
-          </Heading>
+        <Image
+          src={image}
+          width={"60%"}
+          height={400}
+          fit="cover"
+          align="center"
+          display={toggle ? "block" : "none"}
+        />
 
-          {/* body */}
-          <Text color="gray.500">{body}</Text>
+        <VStack spacing={4} align="stretch" w="40%" pl={4}>
+          {/* title */}
+          <Flex>
+            <Heading
+              color={useColorModeValue("gray.700", "white")}
+              fontSize="2xl"
+            >
+              {title}
+            </Heading>
+            <Spacer />
+          </Flex>
+
+          {/* description */}
+          <Text color="gray.500">{description}</Text>
 
           {/* properties */}
           <Heading
             color={useColorModeValue("gray.700", "white")}
             fontSize="xl"
-            fontFamily="body"
             pt={4}
           >
             Properties
@@ -82,13 +103,18 @@ const SubmissionCard = ({
           <HStack spacing={4}>
             <PropertyCard />
             <PropertyCard />
-            <PropertyCard />
+            {/* <PropertyCard /> */}
           </HStack>
-
           <Spacer />
           <Divider />
-          <Text fontWeight={600}>Created by: @rolandgvc</Text>
+          <Flex>
+            <Text fontWeight={600}>Created by: @rolandgvc</Text>
+            <Spacer />
+            <Text fontWeight={600}>{"20:40, 06/17/22"}</Text>
+          </Flex>
         </VStack>
+        <Spacer />
+        <CloseButton onClick={toggleCard} />
       </HStack>
     </Box>
   );

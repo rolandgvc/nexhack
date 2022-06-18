@@ -10,7 +10,6 @@ import {
   Input,
   Textarea,
   Text,
-  useToast,
   Center,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -22,30 +21,6 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 import { useRouter } from "next/router";
-import { config } from "styles/customTheme/config";
-
-import { queryClient } from "api";
-import { GetNfTsDocument } from "generated/graphql";
-
-import {
-  CandyMachineConfigWithoutStorage,
-  CreatorsConfig,
-} from "@metaplex-foundation/js";
-
-export const getServerSideProps = async () => {
-  const { data } = await queryClient.query({
-    query: GetNfTsDocument,
-  });
-
-  if (data.getNFTs) {
-    return {
-      props: { fetchedNFTs: data.getNFTs },
-    };
-  }
-  return {
-    notFound: true,
-  };
-};
 
 const CreatorInput = ({ idx }) => {
   return (
@@ -68,7 +43,7 @@ const CreatorInput = ({ idx }) => {
   );
 };
 
-const NewSubmission = ({ fetchedNFTs }) => {
+const NewSubmission = () => {
   // connect wallet
   const { publicKey } = useWallet();
 
@@ -107,21 +82,13 @@ const NewSubmission = ({ fetchedNFTs }) => {
     fetchNFT();
   }, []);
 
-  // if (!hasNFT) {
-  //   return (
-  //     <Center>Sorry, we couldn't find the NFT ticket in your wallet :(</Center>
-  //   );
-  // }
-
-  /// HOOKS ///
-
-  // const { data: userData } = useQuery(GetUserByAddressDocument, {
-  // variables: { address: publicKey },
-  // });
-  // const { refetch } = useQuery(GetUserByUsernameDocument);
-  // const [updateProfile] = useMutation(UpdateUserProfileDocument);
-
-  /// HANDLERS ///
+  if (!hasNFT) {
+    return (
+      <Center>
+        Sorry, we can't find the contest ticket NFT in your wallet :(
+      </Center>
+    );
+  }
 
   const router = useRouter();
 
@@ -204,11 +171,7 @@ const NewSubmission = ({ fetchedNFTs }) => {
         </FormControl>
 
         <Box p="30px 0 100px 0">
-          <Button
-            onClick={() => {}}
-            // disabled={userData.address}
-            size="lg"
-          >
+          <Button onClick={onSubmitNFT} size="lg">
             Submit NFT
           </Button>
         </Box>
